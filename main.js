@@ -8,7 +8,7 @@ const filterArea = document.getElementById("filter-area");
 const filterBtn = document.getElementById("filter-btn");
 const errorMsg = document.getElementById("filter-error");
 
-// Alterna visibilidade dos filtros de quartos e área conforme tipo selecionado
+// Função para alternar filtro quartos ou área
 function toggleBedroomsOrArea() {
   const selectedType = filterType.value;
   if (selectedType === "Terreno" || selectedType === "Loja") {
@@ -22,12 +22,30 @@ function toggleBedroomsOrArea() {
   }
 }
 
-// Formata preço para estilo europeu com símbolo €
-function formatPrice(price) {
-  return price.toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
+// Função para formatar preço em número (remove € e pontos)
+function parsePrice(priceStr) {
+  if (!priceStr) return null;
+  return Number(priceStr.replace(/[^\d]/g, ""));
 }
 
-// Renderiza os imóveis no container
+// Validação em tempo real dos valores mínimos e máximos
+function validatePrices() {
+  const min = Number(filterMinPrice.value);
+  const max = Number(filterMaxPrice.value);
+  if (min && max && max < min) {
+    errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
+    return false;
+  }
+  errorMsg.textContent = "";
+  return true;
+}
+
+// Validação geral antes do filtro
+function validateFilter() {
+  return validatePrices();
+}
+
+// Renderizar imóveis na página
 function renderProperties(list) {
   container.innerHTML = "";
   if (list.length === 0) {
@@ -40,62 +58,87 @@ function renderProperties(list) {
     card.innerHTML = `
       <img src="${property.image}" alt="${property.title}" />
       <h3>${property.title}</h3>
-      <p>${formatPrice(property.price)}</p>
+      <p>${property.price}</p>
       <a href="#" class="btn-outline">Ver detalhes</a>
     `;
     container.appendChild(card);
   });
 }
 
-// Validação do preço mínimo e máximo
-function validatePriceRange() {
-  const min = parseInt(filterMinPrice.value) || 0;
-  const max = parseInt(filterMaxPrice.value);
-  if (filterMaxPrice.value !== "" && max < min) {
-    errorMsg.style.display = "block";
-    errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
-    return false;
-  }
-  errorMsg.style.display = "none";
-  errorMsg.textContent = "";
-  return true;
-}
+// Função para filtrar imóveis com base nos critérios
+function filterProperties() {
+  if (!validateFilter()) return;
 
-// Aplica filtros e atualiza a lista mostrada
-function applyFilters() {
-  if (!validatePriceRange()) return;
-
-  const type = filterType.value.trim();
-  const location = filterLocation.value.trim().toLowerCase();
-  const minPrice = parseInt(filterMinPrice.value) || 0;
-  const maxPrice = parseInt(filterMaxPrice.value) || Infinity;
-  const bedrooms = parseInt(filterBedrooms.value);
-  const area = parseInt(filterArea.value) || 0;
+  const type = filterType.value.toLowerCase();
+  const location = filterLocation.value.toLowerCase();
+  const minPrice = Number(filterMinPrice.value);
+  const maxPrice = Number(filterMaxPrice.value);
+  const bedrooms = Number(filterBedrooms.value);
+  const area = Number(filterArea.value);
 
   const filtered = properties.filter((p) => {
-    const matchType = !type || p.type === type;
-    const matchLocation = !location || p.location.toLowerCase().includes(location);
-    const matchPrice = p.price >= minPrice && p.price <= maxPrice;
+    // Filtrar tipo
+    if (type && !p.title.toLowerCase().includes(type)) return false;
 
-    let matchBedroomsOrArea = true;
-    if (type === "Terreno" || type === "Loja") {
-      matchBedroomsOrArea = !area || (p.area && p.area >= area);
+    // Filtrar localização
+    if (location && !p.title.toLowerCase().includes(location)) return false;
+
+    // Preço - converter € para número
+    const priceNum = parsePrice(p.price);
+    if (!priceNum) return false;
+
+    if (minPrice && priceNum < minPrice) return false;
+    if (maxPrice && priceNum > maxPrice) return false;
+
+    // Quartos / Área
+    if (type === "terreno" || type === "loja") {
+      if (area && p.area && p.area < area) return false;
     } else {
-      matchBedroomsOrArea = isNaN(bedrooms) || p.bedrooms === bedrooms;
+      if (bedrooms && p.bedrooms && p.bedrooms < bedrooms) return false;
     }
 
-    return matchType && matchLocation && matchPrice && matchBedroomsOrArea;
+    return true;
   });
 
   renderProperties(filtered);
 }
 
 // Eventos
-filterType.addEventListener("change", toggleBedroomsOrArea);
-filterMinPrice.addEventListener("input", validatePriceRange);
-filterMaxPrice.addEventListener("input", validatePriceRange);
-filterBtn.addEventListener("click", applyFilters);
+filterType.addEventListener("change", () => {
+  toggleBedroomsOrArea();
+  filterProperties();
+});
 
-// Inicialização
-toggleBedroomsOrArea(); // Ajusta visibilidade conforme tipo inicial
-renderProperties(properties); // Renderiza lista completa ao carregar
+filterMinPrice.addEventListener("input", () => {
+  validatePrices();
+});
+
+filterMaxPrice.addEventListener("input", () => {
+  validatePrices();
+});
+
+filterLocation.addEventListener("input", () => {
+  filterProperties();
+});
+
+filterBedrooms.addEventListener("input", () => {
+  filterProperties();
+});
+
+filterArea.addEventListener("input", () => {
+  filterProperties();
+});
+
+filterBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (validateFilter()) {
+    filterProperties();
+  }
+});
+
+// Inicializar
+document.addEventListener("DOMContentLoaded", () => {
+  toggleBedroomsOrArea();
+  renderProperties(properties);
+});
+
