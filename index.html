@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>João Pinho Imobiliária</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -14,7 +14,7 @@
       <nav>
         <a href="#imoveis">Imóveis</a>
         <a href="#contacto">Contacto</a>
-        <a href="https://www.instagram.com/joao.pinho24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+        <a href="https://www.instagram.com" target="_blank">Instagram</a>
       </nav>
     </div>
   </header>
@@ -27,23 +27,38 @@
     </div>
   </section>
 
-  <section id="filtros" class="container">
-    <h2>Filtrar Imóveis</h2>
-    <div class="grid">
-      <select id="filter-type">
-        <option value="">Tipo</option>
-        <option>Apartamento</option>
-        <option>Moradia</option>
-        <option>Terreno</option>
-        <option>Loja</option>
-      </select>
-      <input type="text" id="filter-location" placeholder="Localização" />
-      <input type="number" id="filter-min-price" placeholder="Preço Mínimo" min="0" />
-      <input type="number" id="filter-max-price" placeholder="Preço Máximo" min="0" />
-      <input type="number" id="filter-bedrooms" placeholder="Nº de Quartos" min="0" />
-      <button id="filter-btn" class="btn">Filtrar</button>
-    </div>
-    <p id="filter-error" class="error-message" style="display: none;"></p>
+  <section id="pesquisa" class="container">
+    <select id="filter-type">
+      <option value="">Todos os tipos</option>
+      <option value="Apartamento">Apartamento</option>
+      <option value="Moradia">Moradia</option>
+      <option value="Terreno">Terreno</option>
+      <option value="Loja">Loja</option>
+    </select>
+
+    <input type="text" id="filter-location" placeholder="Localização" />
+
+    <input type="number" id="filter-min-price" placeholder="Preço mínimo (€)" min="0" />
+    <input type="number" id="filter-max-price" placeholder="Preço máximo (€)" min="0" />
+
+    <select id="filter-bedrooms" style="display: inline-block;">
+      <option value="">Quartos</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+    <input
+      type="number"
+      id="filter-area"
+      placeholder="Área mínima (m²)"
+      style="display: none;"
+      min="0"
+    />
+
+    <button id="filter-btn" class="btn">Filtrar</button>
+    <p id="filter-error" style="color: red; display: none; margin-top: 0.5rem;"></p>
   </section>
 
   <section id="imoveis" class="container">
