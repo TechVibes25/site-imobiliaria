@@ -1,57 +1,29 @@
-const properties = [
-  {
-    title: "Moradia T3 - Lisboa",
-    price: 350000,
-    priceFormatted: "€350.000",
-    image: "https://images.unsplash.com/photo-1501183638714-4e89b6b8d0f2?auto=format&fit=crop&w=600&q=80",
-    type: "Moradia",
-    location: "Lisboa",
-    bedrooms: 3,
-    area: 180
-  },
-  {
-    title: "Apartamento T2 - Porto",
-    price: 220000,
-    priceFormatted: "€220.000",
-    image: "https://images.unsplash.com/photo-1560448204-6c53296c6d0f?auto=format&fit=crop&w=600&q=80",
-    type: "Apartamento",
-    location: "Porto",
-    bedrooms: 2,
-    area: 90
-  },
-  {
-    title: "Terreno Rústico - Setúbal",
-    price: 75000,
-    priceFormatted: "€75.000",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-    type: "Terreno",
-    location: "Setúbal",
-    bedrooms: 0,
-    area: 3500
-  },
-  {
-    title: "Loja Comercial - Braga",
-    price: 150000,
-    priceFormatted: "€150.000",
-    image: "https://images.unsplash.com/photo-1556740767-8f96f7921e85?auto=format&fit=crop&w=600&q=80",
-    type: "Loja",
-    location: "Braga",
-    bedrooms: 0,
-    area: 120
-  }
-];
-
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("properties");
-  const searchInput = document.getElementById("search");
-  const filterType = document.getElementById("type");
-  const filterLocation = document.getElementById("location");
-  const filterMinPrice = document.getElementById("minPrice");
-  const filterMaxPrice = document.getElementById("maxPrice");
-  const filterBedrooms = document.getElementById("bedrooms");
-  const filterArea = document.getElementById("area");
-  const errorMessage = document.getElementById("error-message");
+  const tipo = document.getElementById("tipo");
+  const localizacao = document.getElementById("localizacao");
+  const precoMin = document.getElementById("precoMin");
+  const precoMax = document.getElementById("precoMax");
+  const quartos = document.getElementById("quartos");
+  const metros = document.getElementById("metros");
   const filterBtn = document.getElementById("filterBtn");
+  const errorMessage = document.getElementById("error-message");
+
+  // Alterna visibilidade de quartos / m²
+  tipo.addEventListener("change", () => {
+    const val = tipo.value;
+    if(val === "Terreno" || val === "Loja") {
+      quartos.style.display = "none";
+      metros.style.display = "inline-block";
+      quartos.value = "";
+    } else {
+      metros.style.display = "none";
+      quartos.style.display = "inline-block";
+      metros.value = "";
+    }
+    errorMessage.classList.remove("active");
+    errorMessage.textContent = "";
+  });
 
   function render(propertiesToRender) {
     container.innerHTML = "";
@@ -60,90 +32,57 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     propertiesToRender.forEach(p => {
-      container.innerHTML += `
-        <div class="card">
-          <img src="${p.image}" alt="${p.title}" />
-          <h3>${p.title}</h3>
-          <p>${p.priceFormatted}</p>
-          <a href="#" class="btn-outline">Ver detalhes</a>
-        </div>
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.title}" />
+        <h3>${p.title}</h3>
+        <p>${p.priceStr}</p>
+        <a href="#" class="btn-outline">Ver detalhes</a>
       `;
+      container.appendChild(card);
     });
   }
 
-  // Mostra/oculta campo quartos ou área conforme tipo selecionado
-  function toggleBedroomsArea() {
-    if (filterType.value === "Terreno" || filterType.value === "Loja") {
-      filterBedrooms.style.display = "none";
-      filterArea.style.display = "inline-block";
-    } else {
-      filterBedrooms.style.display = "inline-block";
-      filterArea.style.display = "none";
-    }
-  }
-
-  toggleBedroomsArea();
-
-  filterType.addEventListener("change", () => {
-    toggleBedroomsArea();
-  });
-
-  function showError(msg) {
-    errorMessage.textContent = msg;
-    errorMessage.classList.add("active");
-  }
-
-  function hideError() {
-    errorMessage.textContent = "";
+  function validateInputs() {
     errorMessage.classList.remove("active");
-  }
+    errorMessage.textContent = "";
 
-  function validatePrices(min, max) {
-    if (min !== "" && max !== "" && Number(max) < Number(min)) {
-      showError("Preço máximo deve ser maior ou igual ao preço mínimo.");
+    const min = precoMin.value ? Number(precoMin.value) : null;
+    const max = precoMax.value ? Number(precoMax.value) : null;
+
+    if(min !== null && max !== null && max < min) {
+      errorMessage.textContent = "Preço máximo deve ser maior ou igual ao preço mínimo.";
+      errorMessage.classList.add("active");
       return false;
     }
-    hideError();
     return true;
   }
 
-  filterBtn.addEventListener("click", (e) => {
-    e.preventDefault();
+  filterBtn.addEventListener("click", () => {
+    if (!validateInputs()) return;
 
-    const searchTerm = searchInput.value.toLowerCase();
-    const typeValue = filterType.value;
-    const locationValue = filterLocation.value.toLowerCase();
-    const minPriceValue = filterMinPrice.value;
-    const maxPriceValue = filterMaxPrice.value;
-    const bedroomsValue = filterBedrooms.value;
-    const areaValue = filterArea.value;
-
-    if (!validatePrices(minPriceValue, maxPriceValue)) {
-      return;
-    }
+    const tipoVal = tipo.value.toLowerCase();
+    const localVal = localizacao.value.trim().toLowerCase();
+    const minPrice = precoMin.value ? Number(precoMin.value) : null;
+    const maxPrice = precoMax.value ? Number(precoMax.value) : null;
+    const quartosVal = quartos.style.display !== "none" && quartos.value ? Number(quartos.value) : null;
+    const metrosVal = metros.style.display !== "none" && metros.value ? Number(metros.value) : null;
 
     let filtered = properties.filter(p => {
-      // Pesquisa por texto (título)
-      if (!p.title.toLowerCase().includes(searchTerm)) return false;
-
       // Tipo
-      if (typeValue !== "Todos" && p.type !== typeValue) return false;
+      if(tipoVal && p.type.toLowerCase() !== tipoVal) return false;
 
-      // Localização
-      if (locationValue !== "" && !p.location.toLowerCase().includes(locationValue)) return false;
+      // Localização - permite filtro parcial
+      if(localVal && !p.location.toLowerCase().includes(localVal)) return false;
 
-      // Preço mínimo
-      if (minPriceValue !== "" && p.price < Number(minPriceValue)) return false;
+      // Preço
+      if(minPrice !== null && p.price < minPrice) return false;
+      if(maxPrice !== null && p.price > maxPrice) return false;
 
-      // Preço máximo
-      if (maxPriceValue !== "" && p.price > Number(maxPriceValue)) return false;
-
-      // Quartos ou Área
-      if (typeValue === "Terreno" || typeValue === "Loja") {
-        if (areaValue !== "" && p.area < Number(areaValue)) return false;
-      } else {
-        if (bedroomsValue !== "" && p.bedrooms < Number(bedroomsValue)) return false;
-      }
+      // Quartos ou metros
+      if(quartosVal !== null && p.bedrooms !== quartosVal) return false;
+      if(metrosVal !== null && p.area < metrosVal) return false;
 
       return true;
     });
@@ -151,7 +90,16 @@ document.addEventListener("DOMContentLoaded", () => {
     render(filtered);
   });
 
-  // Renderiza todos no load
+  // Validação em tempo real para o preço
+  precoMin.addEventListener("input", () => {
+    validateInputs();
+  });
+  precoMax.addEventListener("input", () => {
+    validateInputs();
+  });
+
+  // Render inicial com todos imóveis
   render(properties);
 });
+
 
