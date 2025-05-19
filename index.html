@@ -27,8 +27,26 @@
     </div>
   </section>
 
-  <section id="pesquisa" class="container">
-    <input type="text" id="search" placeholder="Pesquisar por localização ou tipo...">
+  <section id="filtros" class="container">
+    <h2>Filtrar Imóveis</h2>
+    <div class="grid">
+      <select id="filter-type">
+        <option value="">Tipo</option>
+        <option>Apartamento</option>
+        <option>Moradia</option>
+        <option>Terreno</option>
+        <option>Loja</option>
+      </select>
+
+      <input type="text" id="filter-location" placeholder="Localização">
+
+      <input type="number" id="filter-min-price" placeholder="Preço Mínimo">
+      <input type="number" id="filter-max-price" placeholder="Preço Máximo">
+
+      <input type="number" id="filter-bedrooms" placeholder="Nº de Quartos">
+
+      <button id="filter-btn" class="btn">Filtrar</button>
+    </div>
   </section>
 
   <section id="imoveis" class="container">
@@ -49,31 +67,85 @@
     <p>&copy; 2025 João Pinho Imobiliária. Todos os direitos reservados.</p>
   </footer>
 
-  <script src="properties.js"></script>
   <script>
+    const properties = [
+      {
+        title: "Moradia T3 - Lisboa",
+        price: 350000,
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+        type: "Moradia",
+        location: "Lisboa",
+        bedrooms: 3
+      },
+      {
+        title: "Apartamento T2 - Porto",
+        price: 220000,
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+        type: "Apartamento",
+        location: "Porto",
+        bedrooms: 2
+      },
+      {
+        title: "Terreno Rústico - Setúbal",
+        price: 75000,
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+        type: "Terreno",
+        location: "Setúbal",
+        bedrooms: 0
+      },
+      {
+        title: "Loja Comercial - Braga",
+        price: 150000,
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+        type: "Loja",
+        location: "Braga",
+        bedrooms: 0
+      }
+    ];
+
     const container = document.getElementById("properties");
-    const search = document.getElementById("search");
 
     function render(propertiesToRender) {
       container.innerHTML = "";
+      if (propertiesToRender.length === 0) {
+        container.innerHTML = "<p>Nenhum imóvel encontrado.</p>";
+        return;
+      }
+
       propertiesToRender.forEach(p => {
         container.innerHTML += `
           <div class="card">
             <img src="${p.image}" alt="${p.title}" />
             <h3>${p.title}</h3>
-            <p>${p.price}</p>
+            <p>€${p.price.toLocaleString()}</p>
             <a href="#" class="btn-outline">Ver detalhes</a>
           </div>`;
       });
     }
 
-    render(properties);
+    function applyFilters() {
+      const type = document.getElementById("filter-type").value.toLowerCase();
+      const location = document.getElementById("filter-location").value.toLowerCase();
+      const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
+      const maxPrice = parseInt(document.getElementById("filter-max-price").value) || Infinity;
+      const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
 
-    search.addEventListener("input", () => {
-      const term = search.value.toLowerCase();
-      const filtered = properties.filter(p => p.title.toLowerCase().includes(term));
+      const filtered = properties.filter(p => {
+        const matchType = type === "" || p.type.toLowerCase() === type;
+        const matchLocation = location === "" || p.location.toLowerCase().includes(location);
+        const matchPrice = p.price >= minPrice && p.price <= maxPrice;
+        const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
+
+        return matchType && matchLocation && matchPrice && matchBedrooms;
+      });
+
       render(filtered);
-    });
+    }
+
+    document.getElementById("filter-btn").addEventListener("click", applyFilters);
+
+    // Carregar todos inicialmente
+    render(properties);
   </script>
 </body>
 </html>
