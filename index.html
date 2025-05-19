@@ -2,10 +2,10 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>João Pinho Imobiliária</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
@@ -14,7 +14,7 @@
       <nav>
         <a href="#imoveis">Imóveis</a>
         <a href="#contacto">Contacto</a>
-        <a href="https://www.instagram.com" target="_blank">Instagram</a>
+        <a href="https://www.instagram.com/joao.pinho24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
       </nav>
     </div>
   </header>
@@ -37,10 +37,10 @@
         <option>Terreno</option>
         <option>Loja</option>
       </select>
-      <input type="text" id="filter-location" placeholder="Localização">
-      <input type="number" id="filter-min-price" placeholder="Preço Mínimo">
-      <input type="number" id="filter-max-price" placeholder="Preço Máximo">
-      <input type="number" id="filter-bedrooms" placeholder="Nº de Quartos">
+      <input type="text" id="filter-location" placeholder="Localização" />
+      <input type="number" id="filter-min-price" placeholder="Preço Mínimo" min="0" />
+      <input type="number" id="filter-max-price" placeholder="Preço Máximo" min="0" />
+      <input type="number" id="filter-bedrooms" placeholder="Nº de Quartos" min="0" />
       <button id="filter-btn" class="btn">Filtrar</button>
     </div>
     <p id="filter-error" class="error-message" style="display: none;"></p>
@@ -53,8 +53,8 @@
   <section id="contacto" class="container contact-form">
     <h2>Contacto</h2>
     <form>
-      <input type="text" placeholder="Nome" required>
-      <input type="email" placeholder="Email" required>
+      <input type="text" placeholder="Nome" required />
+      <input type="email" placeholder="Email" required />
       <textarea placeholder="Mensagem" required></textarea>
       <button type="submit" class="btn">Enviar</button>
     </form>
@@ -64,116 +64,7 @@
     <p>&copy; 2025 João Pinho Imobiliária. Todos os direitos reservados.</p>
   </footer>
 
-  <script>
-    const properties = [
-      {
-        title: "Moradia T3 - Lisboa",
-        price: 350000,
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-        type: "Moradia",
-        location: "Lisboa",
-        bedrooms: 3
-      },
-      {
-        title: "Apartamento T2 - Porto",
-        price: 220000,
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-        type: "Apartamento",
-        location: "Porto",
-        bedrooms: 2
-      },
-      {
-        title: "Terreno Rústico - Setúbal",
-        price: 75000,
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-        type: "Terreno",
-        location: "Setúbal",
-        bedrooms: 0
-      },
-      {
-        title: "Loja Comercial - Braga",
-        price: 150000,
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-        type: "Loja",
-        location: "Braga",
-        bedrooms: 0
-      }
-    ];
-
-    const container = document.getElementById("properties");
-
-    function render(propertiesToRender) {
-      container.innerHTML = "";
-      if (propertiesToRender.length === 0) {
-        container.innerHTML = "<p>Nenhum imóvel encontrado.</p>";
-        return;
-      }
-      propertiesToRender.forEach(p => {
-        container.innerHTML += `
-          <div class="card">
-            <img src="${p.image}" alt="${p.title}" />
-            <h3>${p.title}</h3>
-            <p>€${p.price.toLocaleString()}</p>
-            <a href="#" class="btn-outline">Ver detalhes</a>
-          </div>`;
-      });
-    }
-
-    function applyFilters() {
-      const type = document.getElementById("filter-type").value.toLowerCase();
-      const location = document.getElementById("filter-location").value.toLowerCase();
-      const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
-      const maxPriceInput = document.getElementById("filter-max-price").value;
-      const maxPrice = maxPriceInput === "" ? Infinity : parseInt(maxPriceInput);
-      const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
-      const errorMsg = document.getElementById("filter-error");
-
-      errorMsg.style.display = "none";
-      errorMsg.textContent = "";
-
-      if (maxPrice < minPrice) {
-        errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
-        errorMsg.style.display = "block";
-        return;
-      }
-
-      const filtered = properties.filter(p => {
-        const matchType = type === "" || p.type.toLowerCase() === type;
-        const matchLocation = location === "" || p.location.toLowerCase().includes(location);
-        const matchPrice = p.price >= minPrice && p.price <= maxPrice;
-        const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
-
-        return matchType && matchLocation && matchPrice && matchBedrooms;
-      });
-
-      render(filtered);
-    }
-
-    const minPriceInput = document.getElementById("filter-min-price");
-const maxPriceInput = document.getElementById("filter-max-price");
-const errorMsg = document.getElementById("filter-error");
-
-function validatePrices() {
-  const minPrice = parseInt(minPriceInput.value) || 0;
-  const maxPriceVal = maxPriceInput.value;
-  const maxPrice = maxPriceVal === "" ? Infinity : parseInt(maxPriceVal);
-
-  if (maxPrice < minPrice) {
-    errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
-    errorMsg.style.display = "block";
-    return false;
-  } else {
-    errorMsg.textContent = "";
-    errorMsg.style.display = "none";
-    return true;
-  }
-}
-
-minPriceInput.addEventListener("input", validatePrices);
-maxPriceInput.addEventListener("input", validatePrices);
-
-    document.getElementById("filter-btn").addEventListener("click", applyFilters);
-    render(properties);
-  </script>
+  <script src="properties.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
