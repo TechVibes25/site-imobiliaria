@@ -123,24 +123,32 @@
       });
     }
 
-    function applyFilters() {
-      const type = document.getElementById("filter-type").value.toLowerCase();
-      const location = document.getElementById("filter-location").value.toLowerCase();
-      const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
-      const maxPrice = parseInt(document.getElementById("filter-max-price").value) || Infinity;
-      const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
-
-      const filtered = properties.filter(p => {
-        const matchType = type === "" || p.type.toLowerCase() === type;
-        const matchLocation = location === "" || p.location.toLowerCase().includes(location);
-        const matchPrice = p.price >= minPrice && p.price <= maxPrice;
-        const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
-
-        return matchType && matchLocation && matchPrice && matchBedrooms;
-      });
-
-      render(filtered);
+  function applyFilters() {
+    const type = document.getElementById("filter-type").value.toLowerCase();
+    const location = document.getElementById("filter-location").value.toLowerCase();
+    const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
+    const maxPriceInput = document.getElementById("filter-max-price").value;
+    const maxPrice = maxPriceInput === "" ? Infinity : parseInt(maxPriceInput);
+    const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
+  
+    // Validação: o máximo não pode ser menor que o mínimo
+    if (maxPrice < minPrice) {
+      alert("O preço máximo não pode ser inferior ao preço mínimo.");
+      return;
     }
+  
+    const filtered = properties.filter(p => {
+      const matchType = type === "" || p.type.toLowerCase() === type;
+      const matchLocation = location === "" || p.location.toLowerCase().includes(location);
+      const matchPrice = p.price >= minPrice && p.price <= maxPrice;
+      const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
+  
+      return matchType && matchLocation && matchPrice && matchBedrooms;
+    });
+  
+    render(filtered);
+  }
+
 
     document.getElementById("filter-btn").addEventListener("click", applyFilters);
 
