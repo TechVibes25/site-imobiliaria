@@ -8,7 +8,7 @@ const filterArea = document.getElementById("filter-area");
 const filterBtn = document.getElementById("filter-btn");
 const errorMsg = document.getElementById("filter-error");
 
-// Função para alternar filtro quartos ou área
+// Alterna filtro quartos ou área conforme tipo selecionado
 function toggleBedroomsOrArea() {
   const selectedType = filterType.value;
   if (selectedType === "Terreno" || selectedType === "Loja") {
@@ -22,13 +22,13 @@ function toggleBedroomsOrArea() {
   }
 }
 
-// Função para formatar preço em número (remove € e pontos)
+// Converte preço € para número (ex: "€350.000" -> 350000)
 function parsePrice(priceStr) {
   if (!priceStr) return null;
   return Number(priceStr.replace(/[^\d]/g, ""));
 }
 
-// Validação em tempo real dos valores mínimos e máximos
+// Validação imediata do preço mínimo e máximo
 function validatePrices() {
   const min = Number(filterMinPrice.value);
   const max = Number(filterMaxPrice.value);
@@ -41,15 +41,12 @@ function validatePrices() {
   return true;
 }
 
-filterMinPrice.addEventListener("input", validatePrices);
-filterMaxPrice.addEventListener("input", validatePrices);
-
 // Validação geral antes do filtro
 function validateFilter() {
   return validatePrices();
 }
 
-// Renderizar imóveis na página
+// Renderiza lista de imóveis
 function renderProperties(list) {
   container.innerHTML = "";
   if (list.length === 0) {
@@ -69,7 +66,7 @@ function renderProperties(list) {
   });
 }
 
-// Função para filtrar imóveis com base nos critérios
+// Filtra imóveis conforme critérios selecionados
 function filterProperties() {
   if (!validateFilter()) return;
 
@@ -81,20 +78,14 @@ function filterProperties() {
   const area = Number(filterArea.value);
 
   const filtered = properties.filter((p) => {
-    // Filtrar tipo
     if (type && !p.title.toLowerCase().includes(type)) return false;
-
-    // Filtrar localização
     if (location && !p.title.toLowerCase().includes(location)) return false;
 
-    // Preço - converter € para número
     const priceNum = parsePrice(p.price);
     if (!priceNum) return false;
-
     if (minPrice && priceNum < minPrice) return false;
     if (maxPrice && priceNum > maxPrice) return false;
 
-    // Quartos / Área
     if (type === "terreno" || type === "loja") {
       if (area && p.area && p.area < area) return false;
     } else {
@@ -112,26 +103,17 @@ filterType.addEventListener("change", () => {
   toggleBedroomsOrArea();
   filterProperties();
 });
-
+filterLocation.addEventListener("input", filterProperties);
 filterMinPrice.addEventListener("input", () => {
   validatePrices();
+  filterProperties();
 });
-
 filterMaxPrice.addEventListener("input", () => {
   validatePrices();
-});
-
-filterLocation.addEventListener("input", () => {
   filterProperties();
 });
-
-filterBedrooms.addEventListener("input", () => {
-  filterProperties();
-});
-
-filterArea.addEventListener("input", () => {
-  filterProperties();
-});
+filterBedrooms.addEventListener("input", filterProperties);
+filterArea.addEventListener("input", filterProperties);
 
 filterBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -140,7 +122,7 @@ filterBtn.addEventListener("click", (e) => {
   }
 });
 
-// Inicializar
+// Inicializa
 document.addEventListener("DOMContentLoaded", () => {
   toggleBedroomsOrArea();
   renderProperties(properties);
