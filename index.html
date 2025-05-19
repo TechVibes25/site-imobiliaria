@@ -149,6 +149,29 @@
       render(filtered);
     }
 
+    const minPriceInput = document.getElementById("filter-min-price");
+const maxPriceInput = document.getElementById("filter-max-price");
+const errorMsg = document.getElementById("filter-error");
+
+function validatePrices() {
+  const minPrice = parseInt(minPriceInput.value) || 0;
+  const maxPriceVal = maxPriceInput.value;
+  const maxPrice = maxPriceVal === "" ? Infinity : parseInt(maxPriceVal);
+
+  if (maxPrice < minPrice) {
+    errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
+    errorMsg.style.display = "block";
+    return false;
+  } else {
+    errorMsg.textContent = "";
+    errorMsg.style.display = "none";
+    return true;
+  }
+}
+
+minPriceInput.addEventListener("input", validatePrices);
+maxPriceInput.addEventListener("input", validatePrices);
+
     document.getElementById("filter-btn").addEventListener("click", applyFilters);
     render(properties);
   </script>
