@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #c62828;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hero {
+  background-color: #fbe9e7;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.properties {
+  padding: 20px;
+  text-align: center;
+}
+
+.property-card {
+  display: inline-block;
+  width: 300px;
+  margin: 15px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+}
+
+.property-card img {
+  width: 100%;
+  height: auto;
+}
+
+footer {
+  background-color: #c62828;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.social a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+}
