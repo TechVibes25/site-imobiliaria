@@ -1,45 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Imobiliária João Pinho</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>João Pinho Imobiliária</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="properties.js" defer></script>
-  <script src="script.js" defer></script>
 </head>
 <body>
-
   <header>
-    <h1>Imobiliária João Pinho</h1>
-    <nav>
-      <a href="#">Início</a>
-      <a href="#">Imóveis</a>
-      <a href="#">Serviços</a>
-      <a href="#">Sobre</a>
-      <a href="#">Contacto</a>
-    </nav>
+    <div class="container header">
+      <h1>João Pinho Imobiliária</h1>
+      <nav>
+        <a href="#imoveis">Imóveis</a>
+        <a href="#contacto">Contacto</a>
+        <a href="https://www.instagram.com" target="_blank">Instagram</a>
+      </nav>
+    </div>
   </header>
 
   <section class="hero">
-    <h2>Encontre o seu novo lar</h2>
-    <p>Casas, apartamentos e muito mais.</p>
+    <div class="hero-content">
+      <h2>Encontre o seu novo lar</h2>
+      <p>Moradias, apartamentos, terrenos e muito mais em todo o país.</p>
+      <a href="#imoveis" class="btn">Ver Imóveis</a>
+    </div>
   </section>
 
-  <section class="properties">
-    <h3>Imóveis em Destaque</h3>
-    <div id="property-list"></div>
+  <section id="pesquisa" class="container">
+    <input type="text" id="search" placeholder="Pesquisar por localização ou tipo...">
+  </section>
+
+  <section id="imoveis" class="container">
+    <div id="properties" class="grid"></div>
+  </section>
+
+  <section id="contacto" class="container contact-form">
+    <h2>Contacto</h2>
+    <form>
+      <input type="text" placeholder="Nome" required>
+      <input type="email" placeholder="Email" required>
+      <textarea placeholder="Mensagem" required></textarea>
+      <button type="submit" class="btn">Enviar</button>
+    </form>
   </section>
 
   <footer>
-    <p>&copy; 2025 Imobiliária João Pinho</p>
-    <div class="social">
-      <a href="https://facebook.com" target="_blank">Facebook</a>
-      <a href="https://instagram.com" target="_blank">Instagram</a>
-      <a href="https://wa.me/351912345678" target="_blank">WhatsApp</a>
-      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
-    </div>
+    <p>&copy; 2025 João Pinho Imobiliária. Todos os direitos reservados.</p>
   </footer>
 
+  <script src="properties.js"></script>
+  <script>
+    const container = document.getElementById("properties");
+    const search = document.getElementById("search");
+
+    function render(propertiesToRender) {
+      container.innerHTML = "";
+      propertiesToRender.forEach(p => {
+        container.innerHTML += `
+          <div class="card">
+            <img src="${p.image}" alt="${p.title}" />
+            <h3>${p.title}</h3>
+            <p>${p.price}</p>
+            <a href="#" class="btn-outline">Ver detalhes</a>
+          </div>`;
+      });
+    }
+
+    render(properties);
+
+    search.addEventListener("input", () => {
+      const term = search.value.toLowerCase();
+      const filtered = properties.filter(p => p.title.toLowerCase().includes(term));
+      render(filtered);
+    });
+  </script>
 </body>
 </html>
