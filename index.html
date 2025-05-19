@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>João Pinho Imobiliária</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -14,7 +14,7 @@
       <nav>
         <a href="#imoveis">Imóveis</a>
         <a href="#contacto">Contacto</a>
-        <a href="https://www.instagram.com/joao.pinho24?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+        <a href="https://www.instagram.com" target="_blank">Instagram</a>
       </nav>
     </div>
   </header>
@@ -28,28 +28,29 @@
   </section>
 
   <section id="pesquisa" class="container">
-    <div class="filter-row">
+    <div id="filter" class="filter-row">
       <select id="filter-type">
-        <option value="">Tipo</option>
+        <option value="">Tipo de imóvel</option>
         <option value="Apartamento">Apartamento</option>
         <option value="Moradia">Moradia</option>
         <option value="Terreno">Terreno</option>
         <option value="Loja">Loja</option>
       </select>
 
-      <input type="text" id="filter-location" placeholder="Localização" />
+      <input type="text" id="filter-location" placeholder="Localização">
 
-      <input type="number" id="filter-min-price" placeholder="Preço mínimo" min="0" />
+      <input type="number" id="filter-min-price" placeholder="Preço mínimo (€)" min="0">
 
-      <input type="number" id="filter-max-price" placeholder="Preço máximo" min="0" />
+      <input type="number" id="filter-max-price" placeholder="Preço máximo (€)" min="0">
 
-      <input type="number" id="filter-bedrooms" placeholder="Nº quartos" min="0" />
+      <input type="number" id="filter-bedrooms" placeholder="Nº quartos" min="0">
 
-      <input type="number" id="filter-area" placeholder="Área m²" min="0" />
+      <input type="number" id="filter-area" placeholder="Área mínima (m²)" min="0">
 
       <button id="filter-btn" class="btn">Filtrar</button>
     </div>
-    <div id="filter-error" style="color: red; margin-top: 0.3rem; display: none;"></div>
+
+    <div id="filter-error" class="error-message"></div>
   </section>
 
   <section id="imoveis" class="container">
@@ -59,8 +60,8 @@
   <section id="contacto" class="container contact-form">
     <h2>Contacto</h2>
     <form>
-      <input type="text" placeholder="Nome" required />
-      <input type="email" placeholder="Email" required />
+      <input type="text" placeholder="Nome" required>
+      <input type="email" placeholder="Email" required>
       <textarea placeholder="Mensagem" required></textarea>
       <button type="submit" class="btn">Enviar</button>
     </form>
