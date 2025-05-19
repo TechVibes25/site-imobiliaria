@@ -81,20 +81,18 @@ header nav a {
 }
 
 #pesquisa {
-  margin: 2rem auto;
+  margin: 2rem auto 0 auto;
   text-align: center;
+  max-width: 1200px;
 }
 
-/* Filtro numa linha */
 #filter {
   display: flex;
   gap: 1rem;
-  max-width: 100%;
-  margin: 1rem auto 0 auto;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap; /* para responsividade */
+  flex-wrap: wrap;
 }
 
 #filter > * {
@@ -125,7 +123,7 @@ header nav a {
 }
 
 #error-message {
-  display: none; /* oculto quando vazio */
+  display: none;
   color: #b91c1c;
   background-color: #fee2e2;
   border: 1px solid #fca5a5;
@@ -245,4 +243,3 @@ footer {
     max-width: 100%;
   }
 }
-
