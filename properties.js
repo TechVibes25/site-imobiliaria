@@ -12,7 +12,7 @@ const properties = [
     title: "Apartamento T2 - Porto",
     price: 220000,
     image:
-      "https://images.unsplash.com/photo-1572120360610-d971b9b5ca68?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80",
     type: "Apartamento",
     location: "Porto",
     bedrooms: 2,
@@ -21,7 +21,7 @@ const properties = [
     title: "Terreno Rústico - Setúbal",
     price: 75000,
     image:
-      "https://images.unsplash.com/photo-1501183638714-5cbb30b47a96?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
     type: "Terreno",
     location: "Setúbal",
     area: 5000,
@@ -30,10 +30,9 @@ const properties = [
     title: "Loja Comercial - Braga",
     price: 150000,
     image:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80",
     type: "Loja",
     location: "Braga",
     area: 120,
   },
 ];
-
