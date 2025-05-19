@@ -32,6 +32,7 @@ function parsePrice(priceStr) {
 function validatePrices() {
   const min = Number(filterMinPrice.value);
   const max = Number(filterMaxPrice.value);
+
   if (min && max && max < min) {
     errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
     return false;
@@ -39,6 +40,9 @@ function validatePrices() {
   errorMsg.textContent = "";
   return true;
 }
+
+filterMinPrice.addEventListener("input", validatePrices);
+filterMaxPrice.addEventListener("input", validatePrices);
 
 // Validação geral antes do filtro
 function validateFilter() {
