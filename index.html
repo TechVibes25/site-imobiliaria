@@ -37,16 +37,13 @@
         <option>Terreno</option>
         <option>Loja</option>
       </select>
-
       <input type="text" id="filter-location" placeholder="Localização">
-
       <input type="number" id="filter-min-price" placeholder="Preço Mínimo">
       <input type="number" id="filter-max-price" placeholder="Preço Máximo">
-
       <input type="number" id="filter-bedrooms" placeholder="Nº de Quartos">
-
       <button id="filter-btn" class="btn">Filtrar</button>
     </div>
+    <p id="filter-error" class="error-message" style="display: none;"></p>
   </section>
 
   <section id="imoveis" class="container">
@@ -111,7 +108,6 @@
         container.innerHTML = "<p>Nenhum imóvel encontrado.</p>";
         return;
       }
-
       propertiesToRender.forEach(p => {
         container.innerHTML += `
           <div class="card">
@@ -123,36 +119,37 @@
       });
     }
 
-  function applyFilters() {
-    const type = document.getElementById("filter-type").value.toLowerCase();
-    const location = document.getElementById("filter-location").value.toLowerCase();
-    const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
-    const maxPriceInput = document.getElementById("filter-max-price").value;
-    const maxPrice = maxPriceInput === "" ? Infinity : parseInt(maxPriceInput);
-    const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
-  
-    // Validação: o máximo não pode ser menor que o mínimo
-    if (maxPrice < minPrice) {
-      alert("O preço máximo não pode ser inferior ao preço mínimo.");
-      return;
-    }
-  
-    const filtered = properties.filter(p => {
-      const matchType = type === "" || p.type.toLowerCase() === type;
-      const matchLocation = location === "" || p.location.toLowerCase().includes(location);
-      const matchPrice = p.price >= minPrice && p.price <= maxPrice;
-      const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
-  
-      return matchType && matchLocation && matchPrice && matchBedrooms;
-    });
-  
-    render(filtered);
-  }
+    function applyFilters() {
+      const type = document.getElementById("filter-type").value.toLowerCase();
+      const location = document.getElementById("filter-location").value.toLowerCase();
+      const minPrice = parseInt(document.getElementById("filter-min-price").value) || 0;
+      const maxPriceInput = document.getElementById("filter-max-price").value;
+      const maxPrice = maxPriceInput === "" ? Infinity : parseInt(maxPriceInput);
+      const bedrooms = parseInt(document.getElementById("filter-bedrooms").value);
+      const errorMsg = document.getElementById("filter-error");
 
+      errorMsg.style.display = "none";
+      errorMsg.textContent = "";
+
+      if (maxPrice < minPrice) {
+        errorMsg.textContent = "O preço máximo não pode ser inferior ao preço mínimo.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      const filtered = properties.filter(p => {
+        const matchType = type === "" || p.type.toLowerCase() === type;
+        const matchLocation = location === "" || p.location.toLowerCase().includes(location);
+        const matchPrice = p.price >= minPrice && p.price <= maxPrice;
+        const matchBedrooms = isNaN(bedrooms) || p.bedrooms === bedrooms;
+
+        return matchType && matchLocation && matchPrice && matchBedrooms;
+      });
+
+      render(filtered);
+    }
 
     document.getElementById("filter-btn").addEventListener("click", applyFilters);
-
-    // Carregar todos inicialmente
     render(properties);
   </script>
 </body>
