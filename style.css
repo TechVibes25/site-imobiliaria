@@ -203,3 +203,9 @@ footer {
   width: 100%;
 }
 
+.error-message {
+  color: #dc2626;
+  margin-top: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
